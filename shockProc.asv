@@ -34,14 +34,7 @@ for i = 1:length(presSecs)
     numStr = num2str(presSecs(i));
     
     % Draw the number to screen
-    DrawFormattedText(stimWindow,numStr,'center','center','k');
-    
-    % Flip to the screen
-    Screen('Flip', stimWindow);
-    
+    DrawFormattedText(s
 end
-
-WaitSecs(1); 
-sca
 end
 
