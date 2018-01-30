@@ -14,20 +14,23 @@ function [shockTimes] = shockProc(lj,ljChan,stimWindow,stimRect)
 rng('shuffle');
 numStim = randi(5);
 shockTimes = 3 + randi(54,[numShocks,1])./2; % generate times according to constraints described above.
+shockTimes = sort(shockTimes); % sort them in ascending order
 
 % Generate and cycle through displays. Send TTL pulses at the appropriate
 % times
 
-dispIntro = ... "
-    ... In the next 30 seconds you may be shocked multiple times.
-    ... Please keep your eyes focused on the fixation in the center of the screen.
-    ... Press any key to begin.
-    ... " 
+dispIntro = "In the next 30 seconds you may be shocked multiple times. \n Please keep your eyes focused on the fixation in the center of the screen. \n Press any key to begin.";   
+
+DrawFormattedText(stimWindow,dispIntro,'center','center','k');
+Pause(10);
+
 [xCen, yCen] = RectCenter(stimeRect); % center coordinates
 [screenXpix, screenYpix] = Screen('WindowSize', stimWindow); %size of screen
 nomFrameRate = Screen('NominalFrameRate',stimWindow); % nominal frame rate of stime display
 
 presSecs = [sort(repmat(1:30,1,nominalFrameRate),'descend') 0]; % List of display numbers
+
+shocked = 0; % variable to track number of times shocked so far
 
 for i = 1:length(presSecs)
     % Convert display number to string
@@ -39,6 +42,11 @@ for i = 1:length(presSecs)
     % Flip to the screen
     Screen('Flip', stimWindow);
     
+    % If the time matches with the shock times, send TTL pulse
+    if numStr == 30 - shockTimes(shocked + 1)
+        lj.toggleFIO(lj,ljChan);
+    end
+        
 end
 
 WaitSecs(1); 
