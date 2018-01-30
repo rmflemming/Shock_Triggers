@@ -35,17 +35,18 @@ for i = 1:length(presSecs)
     numStr = num2str(presSecs(i));
     
     % Draw the number to screen (if whole number)
-    if mod(presSecs(i),1) == 0 
+    if mod(presSecs(i),1) == 0 % if whole number
         DrawFormattedText(stimWindow,numStr,'center','center','k');
     
         % Flip to the screen
         Screen('Flip', stimWindow);
     end
+    
     % If the time matches with the shock times, send TTL pulse
-    try
-        if numStr == 30 - shockTimes(shocked + 1)
-            lj.toggleFIO(lj,ljChan);
-            shocked = shocked + 1;
+    if shocked < length(shockTimes)
+        if numStr == 30 - shockTimes(shocked + 1) % if it's the shock time...
+            lj.toggleFIO(lj,ljChan); % Triggers ttl pulse at ljChan
+            shocked = shocked + 1; % update shock counter
         end   
     end        
 end
