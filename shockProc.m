@@ -24,8 +24,6 @@ dispIntro = "In the next 30 seconds you may be shocked multiple times. \n Please
 DrawFormattedText(stimWindow,dispIntro,'center','center','k');
 Pause(10);
 
-[xCen, yCen] = RectCenter(stimeRect); % center coordinates
-[screenXpix, screenYpix] = Screen('WindowSize', stimWindow); %size of screen
 nomFrameRate = Screen('NominalFrameRate',stimWindow); % nominal frame rate of stime display
 
 presSecs = [sort(repmat(1:30,1,nominalFrameRate),'descend') 0]; % List of display numbers
@@ -43,10 +41,12 @@ for i = 1:length(presSecs)
     Screen('Flip', stimWindow);
     
     % If the time matches with the shock times, send TTL pulse
-    if numStr == 30 - shockTimes(shocked + 1)
-        lj.toggleFIO(lj,ljChan);
-    end
-        
+    try
+        if numStr == 30 - shockTimes(shocked + 1)
+            lj.toggleFIO(lj,ljChan);
+            shocked = shocked + 1;
+        end
+    end        
 end
 
 WaitSecs(1); 
