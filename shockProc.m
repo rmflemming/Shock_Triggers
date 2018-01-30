@@ -26,7 +26,7 @@ Pause(10);
 
 nomFrameRate = Screen('NominalFrameRate',stimWindow); % nominal frame rate of stime display
 
-presSecs = [sort(repmat(1:30,1,nominalFrameRate),'descend') 0]; % List of display numbers
+presSecs = [sort(repmat(1:.5:30,1,nominalFrameRate*2),'descend') 0]; % List of display numbers
 
 shocked = 0; % variable to track number of times shocked so far
 
@@ -34,18 +34,21 @@ for i = 1:length(presSecs)
     % Convert display number to string
     numStr = num2str(presSecs(i));
     
-    % Draw the number to screen
-    DrawFormattedText(stimWindow,numStr,'center','center','k');
+    % Draw the number to screen (if whole number)
+    if mod(presSecs(i),1) == 0 
+        DrawFormattedText(stimWindow,numStr,'center','center','k');
     
-    % Flip to the screen
-    Screen('Flip', stimWindow);
-    
+        % Flip to the screen
+        Screen('Flip', stimWindow);
+    end
     % If the time matches with the shock times, send TTL pulse
     try
         if numStr == 30 - shockTimes(shocked + 1)
             lj.toggleFIO(lj,ljChan);
             shocked = shocked + 1;
         end
+    %% NEED A MECHANIC TO HANDLE HALF SECOND TIMES...    
+        
     end        
 end
 
