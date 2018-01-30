@@ -46,9 +46,7 @@ for i = 1:length(presSecs)
         if numStr == 30 - shockTimes(shocked + 1)
             lj.toggleFIO(lj,ljChan);
             shocked = shocked + 1;
-        end
-    %% NEED A MECHANIC TO HANDLE HALF SECOND TIMES...    
-        
+        end   
     end        
 end
 
