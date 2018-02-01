@@ -47,7 +47,7 @@ for i = 1:length(presSecs)
     
     % If the time matches with the shock times, send TTL pulse
     if shocked < length(shockTimes)
-        if numStr == 30 - shockTimes(shocked + 1) % if it's the shock time...
+        if presSecs(i) == 30 - shockTimes(shocked + 1) % if it's the shock time...
             lj.toggleFIO(lj, ljChan); % Triggers ttl pulse at ljChan
             shocked = shocked + 1; % update shock counter
         end   
